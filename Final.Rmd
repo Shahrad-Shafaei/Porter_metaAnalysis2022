@@ -1,0 +1,573 @@
+---
+title: "Main"
+author: "Alexis Porter"
+date: "2022-12-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Construct 2X2 matrix based on sensitivity/specificity scores
+
+|        Tested          |  SZ| CON| 
+|:-----------------|----:|---:|
+|SZ         | $TP$|   $FP$|  
+|Con     | $FN$|   $TN$|  
+|Total       | $n_{SZ}$|   $n_{CON}$|  
+
+
+$TP = Sensitivity*n_{SZ}$ \
+$FP = n_{CON}*(1-Specificity)$ \
+$FN = n_{SZ} - TP$ \
+$TN = n_{CON} - FP$ \
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(data.table)
+library(patchwork)
+library(car)
+library(cutpointr)
+library(tidyverse)
+library(ggplot2)
+library(metafor)
+library(scales)
+library(dplyr)
+
+
+
+# Load dataset set categorical variables as such
+# All datasets (even overlapping), external results included
+meta_df=read_csv('~/Desktop/meta_analysis/home_response/external.csv') %>%
+  mutate(imaging = factor(imaging, levels = c("T1", "DTI", "FC", "Multimodal")),  
+         mL_method = factor(mL_method),
+         imaging_spec = factor(imaging_spec),
+         reporting_validation_set = factor(reporting_validation_set),
+         names = Study,
+         names(names), 
+         TP = round(sensitivity * n1),
+         FP = round(n2*(1-specificity)),
+         FN = n1 - TP,
+         TN = n2 - FP,
+         N = n1 + n2)
+meta_df$tpr = tpr(meta_df$TP, meta_df$FN)
+meta_df$fpr = fpr(meta_df$FP, meta_df$TN)
+meta_df = meta_df[order(meta_df$imaging, 5000-meta_df$Year),]
+#Remove overlapping datasets since calculating average
+#external data
+ext_plot <- meta_df %>%
+  filter(reporting_validation_set == 1)
+
+external_df <- meta_df %>%
+  filter(reporting_validation_set == 1 & imaging == 'FC' | imaging == 'T1')
+
+#External data no outliers
+ext_no_outliers <- meta_df %>%
+  filter(reporting_validation_set == 1 &  imaging == 'FC' | imaging == 'T1' & flagged_external_outlier == 0)
+
+#Internal training folds 
+internal_df=read_csv('~/Desktop/meta_analysis/home_response/internal_training_only.csv') %>%
+  mutate(imaging = factor(imaging, levels = c("T1", "DTI", "FC", "Multimodal")),  
+         mL_method = factor(mL_method),
+         imaging_spec = factor(imaging_spec),
+         reporting_validation_set = factor(reporting_validation_set),
+         names = Study,
+         names(names), 
+         TP = round(sensitivity * n1),
+         FP = round(n2*(1-specificity)),
+         FN = n1 - TP,
+         TN = n2 - FP,
+         N = n1 + n2)
+internal_df$tpr = tpr(internal_df$TP, internal_df$FN)
+internal_df$fpr = fpr(internal_df$FP, internal_df$TN)
+internal_df = internal_df[order(internal_df$imaging, 5000-internal_df$Year),]
+
+over <- internal_df %>%
+  filter(Data_overlap_avg==1) %>%
+  mutate(Dataset = factor(Dataset, levels = c("BRNO", "Cobre", "NAMIC", "W. China")),  )
+over = over[order(over$Dataset, 5000-over$Year),]
+
+
+#report training data only and no outliers
+internal_df = internal_df %>%
+  filter(reporting_validation_set == 0 &  Data_overlap==0)
+#report training data only and no outliers
+int_no_outliers = internal_df %>%
+  filter(overlap_outliers ==0 )
+
+
+
+```
+
+
+
+
+```{r}
+#Description of means and std 
+external_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(sensitivity), list(name = mean))
+
+external_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(specificity), list(name = mean))
+
+#Standard deviation
+external_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(sensitivity), list(name = sd))
+
+external_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(specificity), list(name = sd))
+
+
+#Internal folds mean and sd
+internal_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(sensitivity), list(name = mean))
+
+internal_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(specificity), list(name = mean))
+
+internal_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(sensitivity), list(name = sd))
+
+internal_df %>%
+  group_by(imaging) %>%
+  summarise_at(vars(specificity), list(name = sd))
+```
+
+<br>
+
+# Comparison Between internal external performance
+
+```{r, warning=FALSE,message=FALSE, fig.width=20, fig.height=7}
+p1<- ggplot(internal_df, aes(fpr, tpr)) +
+  geom_point(aes(fill = factor(imaging), size = N), colour = 'black',shape = 21, alpha = .6) +
+  xlim(0, 1) +
+  ylim(0,1) + 
+  labs(size = 'Sample Size', x = 'False Positive Rate', y = "Sensitivity", title='Internal Dataset')+
+  #scale_fill_discrete(name = 'Neuroimaging\nMethod', labels = c("DTI", "rs-FC","Multimodal",  "T1"))+
+  scale_fill_manual(name = 'Neuroimaging\nMethod', labels = c("T1","DTI", "rs-FC","Multimodal"), values = c( 'blue','green', 'red', 'black')) +
+  scale_size(range=c(5,18),breaks=c(25,50,75,100,500,1000),labels=c("25","50","75","100","500",">1000"),guide="legend") +
+  geom_abline(coef = c(0,1), lty = 2) +
+    theme(axis.text.x = element_text(size = 20),axis.text.y = element_text(size = 20),legend.text=element_text(size=15), legend.title = element_text(size =20),
+        axis.title.x = element_text(size = 30),axis.title.y = element_text(size = 30), title=element_text(size=30))   +
+  guides(fill = guide_legend(override.aes = list(size = 6)))
+
+
+p2<- ggplot(ext_plot, aes(fpr, tpr)) +
+  geom_point(aes(fill = factor(imaging), size = N), colour = 'black',shape = 21, alpha = .6) +
+  xlim(0, 1) +
+  ylim(0,1) + 
+  labs(size = 'Sample Size', x = 'False Positive Rate', y = "Sensitivity", title = 'External Dataset')+
+  #scale_fill_discrete(name = 'Neuroimaging\nMethod', labels = c("DTI", "rs-FC","Multimodal",  "T1"))+
+  scale_fill_manual(name = 'Neuroimaging\nMethod', labels = c("T1","DTI", "rs-FC","Multimodal"), values = c( 'blue','green', 'red', 'black')) +
+  scale_size(range=c(5,18),breaks=c(25,50,75,100,500,1000),labels=c("25","50","75","100","500",">1000"),guide="legend") +
+  geom_abline(coef = c(0,1), lty = 2) +
+    theme(axis.text.x = element_text(size = 20),axis.text.y = element_text(size = 20),legend.text=element_text(size=15), legend.title = element_text(size =20),
+        axis.title.x = element_text(size = 30),axis.title.y = element_text(size = 30), title=element_text(size=30))   +
+  guides(fill = guide_legend(override.aes = list(size = 6)))
+
+p1|p2
+
+#ggsave('~/Desktop/meta_analysis/figures/final/comparison_sensplot.png')
+```
+
+
+<br>
+
+#Code for determining outliers within internal data
+
+
+```{r,warning=FALSE,message=FALSE,fig.width=10, fig.height=8}
+
+library(dmetar)
+
+dat_old <- escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=internal_df,
+              slab=paste(Study))
+dat_old$esse <- sqrt(dat_old$vi)
+DTI_t <- dat_old%>%
+  filter(imaging == 'DTI')
+T1_t <- dat_old %>%
+  filter(imaging == 'T1')
+FC_t <- dat_old%>%
+  filter(imaging == 'FC')
+multi_t <- dat_old %>%
+  filter(imaging == 'Multimodal')
+res.DTI_t <- rma(yi, vi, data=DTI_t, method = 'EE') #to test for homogeneity (equal effects model)
+res.FC_t <- rma(yi, vi,     data=FC_t, method = 'EE')
+res.multi_t <- rma(yi, vi,  data=multi_t, method = 'EE')
+res.T1_t <- rma(yi, vi, data=T1_t, method = 'EE') 
+
+
+
+op <- par(mar = c(4,6,6,4) + 0.1, mfrow=c(2,2))
+#par(mfrow=c(2,2)) 
+funnel(res.T1_t, main="Model for T1", xlab = "",cex.main = 3, cex.lab = 3, cex.axis =2.5)
+funnel(res.DTI_t, main="Model for DTI", ylab = "", xlab = "",cex.main = 3, cex.lab = 3, cex.axis =2.5)
+funnel(res.FC_t, main="Model for FC" ,cex.main = 3, cex.lab = 3, cex.axis =2.5)
+funnel(res.multi_t,  main="Model for Multimodal", ylab = "", cex.main = 3, cex.lab = 3, cex.axis =2.5)
+
+
+#Eggers test 
+regtest(yi, vi, data = T1_t)
+regtest(yi, vi, data = DTI_t)
+regtest(yi, vi, data = FC_t)
+regtest(yi, vi, data = multi_t)
+
+### Peters' test (using inverse of total sample size)
+summary(lm(yi ~ I(1/N), weights=1/vi, data=DTI_t))
+summary(lm(yi ~ I(1/N), weights=1/vi, data=T1_t))
+summary(lm(yi ~ I(1/N), weights=1/vi, data=FC_t))
+summary(lm(yi ~ I(1/N), weights=1/vi, data=multi_t))
+
+#outliers lying 95% pooled estimate
+find.outliers(res.DTI_t)
+find.outliers(res.FC_t)
+find.outliers(res.multi_t)
+find.outliers(res.T1_t)
+```
+
+# Outliers from external data
+
+```{r}
+
+dat_old <- escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=external_df,
+              slab=paste(Study))
+dat_old$esse <- sqrt(dat_old$vi)
+
+T1_t <- dat_old %>%
+  filter(imaging == 'T1')
+FC_t <- dat_old%>%
+  filter(imaging == 'FC')
+
+
+res.FC_t <- rma(yi, vi, data=FC_t, method = 'EE')
+res.T1_t <- rma(yi, vi, data=T1_t, method = 'EE') 
+
+
+
+op <- par(mar = c(4,6,6,4) + 0.1, mfrow=c(1,2))
+funnel(res.T1_t, main="Model for T1", xlab = "",cex.main = 3, cex.lab = 3, cex.axis =2.5)
+funnel(res.FC_t, main="Model for FC" ,cex.main = 3, cex.lab = 3, cex.axis =2.5)
+
+#Eggers test 
+regtest(yi, vi, data = T1_t)
+regtest(yi, vi, data = FC_t)
+
+### Peters' test (using inverse of total sample size)
+summary(lm(yi ~ I(1/N), weights=1/vi, data=T1_t))
+summary(lm(yi ~ I(1/N), weights=1/vi, data=FC_t))
+
+#outliers lying 95% pooled estimate
+find.outliers(res.FC_t)
+find.outliers(res.T1_t)
+```
+
+# Internal metrics after outlier removal
+
+```{r,fig.width=20, fig.height=40,warning=FALSE,message=FALSE}
+
+# Odds ratio model after outlier removal (internal) 
+
+dat <- escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=int_no_outliers,
+              slab=paste(Study))
+
+
+### fit random-effects model
+res <- rma(yi, vi, data=dat, measure = "OR")
+### a little helper function to add Q-test, I^2, and tau^2 estimate info
+mlabfun <- function(text, res) {
+   list(bquote(paste(.(text),
+      " (Q = ", .(formatC(res$QE, digits=2, format="f")),
+      ", df = ", .(res$k - res$p),
+      ", p ", .(metafor:::.pval(res$QEp, digits=2, showeq=TRUE, sep=" ")), "; ",
+      I^2, " = ", .(formatC(res$I2, digits=1, format="f")), "%, ",
+      tau^2, " = ", .(formatC(res$tau2, digits=2, format="f")), ")")))}
+ 
+### set up forest plot (with 2x2 table counts added; the 'rows' argument is
+### used to specify in which rows the outcomes will be plotted)
+forest(res, xlim=c(-38, 20),at=c(-0.2,1, 2.35, 4.9, 7.45, 10), efac=c(0,1), #steps = 5,
+       ilab=cbind(TP, FN, FP, TN), ilab.xpos=c(-23,-20,-16,-13),refline = 1,alim = c(-.2,10),
+       cex=2, ylim=c(-2, 52), order=c(imaging), rows=c(3:10, 15:21, 26:38, 43:47),
+       mlab=mlabfun("Model for All Studies", res),
+        header="Author(s)\nand Year")
+
+ 
+### add additional column headings to the plot
+text(c(-23,-20,-16,-13), 52, c("TP", "FN", "FP", "TN"), cex = 2, font = 2)
+text(c(-21.5,-14.5),     53.5, c("Scz", "Control"), cex = 2, font = 2)
+ 
+ 
+### add text for the subgroups
+text(-38, c(11,22,39, 48), pos=4, cex = 2, font =2, c("T1",
+                               "DTI",
+                               "rs-FC",
+                               "Multimodal")) 
+ 
+
+
+### fit random-effects model in the three subgroups
+res.s <- rma(yi, vi, subset=(imaging=="DTI"), data=dat)
+res.r <- rma(yi, vi, subset=(imaging=="FC"),     data=dat)
+res.a <- rma(yi, vi, subset=(imaging=="Multimodal"),  data=dat) 
+res.m <- rma(yi, vi, subset=(imaging=="T1"),  data=dat) 
+ 
+### add summary polygons for the three subgroups
+addpoly(res.m, row=1.5, mlab=mlabfun("Model for T1", res.m))
+addpoly(res.s, row=13.5, mlab=mlabfun("Model for DTI", res.s))
+addpoly(res.r, row= 24.5, mlab=mlabfun("Model for rs-FC", res.r))
+addpoly(res.a, row= 41.5, mlab=mlabfun("Model for Multi", res.a))
+ 
+### fit meta-regression model to test for subgroup differences
+res <- rma(yi, vi, mods = ~imaging, data=dat)
+ 
+### add text for the test of subgroup differences
+text(-38, -3, pos=4, cex=2, bquote(paste("Test for Subgroup Differences: ",
+     Q[M], " = ", .(formatC(res$QM, digits=2, format="f")), ", df = ", .(res$p - 1),
+     ", p = ", .(formatC(res$QMp, digits=2, format="f")))))
+#dev.off() 
+```
+# Combined averages 
+```{r,fig.width=35, fig.height=25,warning=FALSE,message=FALSE}
+#Forest plot after outlier removal
+### fit random-effects model
+over_Dat = escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=over,
+              slab=paste(Study))
+
+over_Dat %>%
+  mutate(factor(Dataset))
+res <- rma(yi, vi, data=over_Dat, measure = "OR")
+### a little helper function to add Q-test, I^2, and tau^2 estimate info
+mlabfun <- function(text, res) {
+   list(bquote(paste(.(text),
+      " (Q = ", .(formatC(res$QE, digits=2, format="f")),
+      ", df = ", .(res$k - res$p),
+      ", p ", .(metafor:::.pval(res$QEp, digits=2, showeq=TRUE, sep=" ")), "; ",
+      I^2, " = ", .(formatC(res$I2, digits=1, format="f")), "%, ",
+      tau^2, " = ", .(formatC(res$tau2, digits=2, format="f")), ")")))}
+ 
+### set up forest plot (with 2x2 table counts added; the 'rows' argument is
+### used to specify in which rows the outcomes will be plotted) 
+
+
+forest(res, xlim=c(-16, 15),efac=c(0,1), #steps = 5,
+       ilab=cbind(TP, FN, FP, TN), ilab.xpos=c(-5.5,-4.5,-3.5,-2.5), alim = c(-1,15), cex.lab = 2,refline = 1, at=c(-1,1, 2.35, 4.9, 7.45, 10),
+       cex=3, ylim=c(-5, 21), order=order(Dataset), rows=c(3:5,8:10, 13:14, 17:18),
+       mlab=mlabfun("Pooled Estimate", res),header="Author(s)\nand Year", xlab = "")
+
+### add additional column headings to the plot
+text(c(-5.5,-4.5,-3.5,-2.5), 20, c("TP", "FN", "FP", "TN"), font =2 , cex = 3)
+text(c(-5,-3), 21.5, c("Scz", "Control"), cex = 3.5, font = 2)
+
+
+ 
+### add text for the subgroups
+text(-16, c(5.6,10.6,14.6, 18.6), font = 2, pos=4, cex = 3, c("BRNO",
+                               "Cobre",
+                               "NAMIC",
+                               "W. China"))
+ 
+
+
+### fit random-effects model in the three subgroups
+res.s <- rma(yi, vi, subset=(Dataset=="Cobre"), data=over_Dat)
+res.r <- rma(yi, vi, subset=(Dataset=="BRNO"), data=over_Dat)
+res.a <- rma(yi, vi, subset=(Dataset=="NAMIC"),  data=over_Dat) 
+res.m <- rma(yi, vi, subset=(Dataset=="W. China"),  data=over_Dat) #top is T1
+ 
+### add summary polygons for the three subgroups
+addpoly(res.s, row=6.5, mlab=mlabfun("Model for Cobre", res.m), cex = 3, efac = 0.5)
+addpoly(res.r, row=1.5, mlab=mlabfun("Model for BRNO", res.s), cex =3,efac = 0.5 )
+addpoly(res.a, row= 11.5, mlab=mlabfun("Model for NAMIC", res.r), cex = 3,efac = 0.5)
+addpoly(res.m, row= 15.5, mlab=mlabfun("Model for W. China", res.a), cex = 3,efac = 0.5)
+#addpoly(res, row = 2, mlab=mlabfun("Model for All Studies", res), cex = 3,efac = 0.5)
+### fit meta-regression model to test for subgroup differences
+#res <- rma(yi, vi, mods = ~imaging, data=dat)
+
+```
+
+
+
+```{r}
+detach("package:metafor", unload=TRUE) 
+#sometimes you have to detach package here to get mada to run
+```
+
+#Reitsma test for internal data with outliers
+
+```{r,warning=FALSE,message=FALSE}
+library(mada)
+
+#Intercept model
+fit.int <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+#imaging
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ imaging, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#year
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ Year, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#Diagnosis
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ diagnosis, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#Sample size
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ n1+n2, method = "ml")
+anova(fit.imaging.ml, fit.int)
+summary(fit.imaging.ml)
+
+#More condensed machine learning (linear v non)
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ mL, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#Cross validation
+fit.imaging.ml <- reitsma(internal_df, formula = cbind(tsens, tfpr) ~ CV, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+```
+
+#Reitsma check with externaldata with outliers
+```{r}
+remove.nan = external_df %>% drop_na()
+remove.nan$imaging = factor(remove.nan$imaging)
+
+fit.int <- reitsma(remove.nan, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+#imaging
+fit.imaging.ml <- reitsma(remove.nan, formula = cbind(tsens, tfpr) ~ imaging, method = "ml")
+anova(fit.imaging.ml, fit.int)
+#year
+fit.imaging.ml <- reitsma(remove.nan, formula = cbind(tsens, tfpr) ~ Year, method = "ml")
+anova(fit.imaging.ml, fit.int)
+#Sample size
+fit.imaging.ml <- reitsma(remove.nan, formula = cbind(tsens, tfpr) ~ n1+n2, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+```
+
+# Internal df after outlier removal
+```{r}
+fit.int <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+#imaging
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ imaging, method = "ml")
+anova(fit.imaging.ml, fit.int)
+summary(fit.imaging.ml)
+
+#year
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ Year, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#Diagnosis
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ diagnosis, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+#Sample size
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ n1+n2, method = "ml")
+anova(fit.imaging.ml, fit.int)
+summary(fit.imaging.ml)
+#More condensed machine learning (linear v non)
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ mL, method = "ml")
+anova(fit.imaging.ml, fit.int)
+#Cross validation
+fit.imaging.ml <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ CV, method = "ml")
+anova(fit.imaging.ml, fit.int)
+
+```
+
+
+
+
+#Evaluating imaging modality in more detail
+
+
+```{r}
+
+
+#mada output is incompatbile with mult comp so will fit models separately comparing them to 
+DTI_FC = int_no_outliers %>% filter(imaging == "DTI" | imaging == "FC")
+DTI_T1= int_no_outliers %>% filter(imaging == "DTI" | imaging == "T1")
+DTI_mult= int_no_outliers %>% filter(imaging == "DTI" | imaging == "Multimodal")
+T1_FC = int_no_outliers %>% filter(imaging == "T1" | imaging == "FC")
+T1_mult= int_no_outliers %>% filter(imaging == "T1" | imaging == "Multimodal")
+multi_FC = int_no_outliers %>% filter(imaging == "Multimodal" | imaging == "FC")
+
+fit.DTI.FC <- reitsma(DTI_FC, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+fit.DTI.T1 <- reitsma(DTI_T1, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+fit.DTI.multi <- reitsma(DTI_mult, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+fit.T1.FC <- reitsma(T1_FC, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+fit.T1.multi <- reitsma(T1_mult, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+fit.multi.FC <- reitsma(multi_FC, formula = cbind(tsens, tfpr) ~ factor(imaging), method = "ml")
+
+summary(fit.DTI.FC)
+summary(fit.DTI.T1)
+summary(fit.DTI.multi)
+summary(fit.T1.FC)
+summary(fit.T1.multi)
+summary(fit.multi.FC)
+
+p=c(.02,.4,.006,.06,.01,.3)#,.02,.2,.1,.2,.2,1)
+adjusted.p <- p.adjust(p, "fdr")
+adjusted.p
+```
+
+# Internal after Outlier removal
+
+```{r, figures-side,fig.width=25, fig.height=10, dev = "png"}
+
+fit.imaging <- reitsma(int_no_outliers, formula = cbind(tsens, tfpr) ~ imaging)
+
+both <- int_no_outliers %>%
+  filter(imaging == 'Multimodal')
+DTI <- int_no_outliers %>%
+  filter(imaging == 'DTI')
+FC <- int_no_outliers %>%
+  filter(imaging == 'FC')
+T1 <- int_no_outliers %>%
+  filter(imaging == 'T1')  
+# Fitting the reitsma model with no covariates
+fit.reitsma <- reitsma(int_no_outliers)
+fit.both <- reitsma(both)
+fit.dti <- reitsma(DTI)
+fit.fc <- reitsma(FC)
+fit.t1 <- reitsma(T1)
+
+par(mfrow=c(1,2), mai = c(1,1.07,1.07,1)) 
+#png(file='~/Desktop/meta_analysis/figures/reitsma_plot.png')
+
+plot(fit.reitsma, sroclwd = 4, lwd = 4,
+main = "SROC curve (bivariate model)", cex.main = 3.5, cex.lab = 3.5, cex.axis =2.5)
+points(fpr(both), sens(both), pch = 2, cex = 3, lwd = 2.5)
+points(fpr(FC), sens(FC), pch = 2, col = 'red', cex = 3, lwd = 2.5)
+points(fpr(T1), sens(T1), pch = 2, col = 'blue', cex = 3, lwd= 2.5)
+points(fpr(DTI), sens(DTI), pch = 2, col = 'green', cex = 3, lwd = 2.5)
+legend("bottomright", legend=c("T1","DTI", "rs-FC", "Multimodal",'summary'), pch=c(2,2,2,2,1), lwd = 4, col = c('blue','green','red', 'black', 'black'), cex = 3)
+abline(coef = c(0,1), lty = 2)
+
+plot(fit.both, xlim = c(0,.5), ylim = c(0.5,1), cex.main = 3.5, cex.lab = 3.5, cex.axis =2.5, main = "Comparison between neuroimaging methods", lwd = 4)
+lines(sroc(fit.dti), lty = 2, col = 'green', lwd = 4)
+lines(sroc(fit.fc), lty = 3, col = 'red', lwd = 4)
+lines(sroc(fit.t1), lty = 4, col = 'blue', lwd = 4)
+ROCellipse(fit.dti, lty = 2, pch = 2, col = 'green',add = TRUE, lwd = 4)
+ROCellipse(fit.fc, lty = 3, pch = 2, col = 'red',add = TRUE, lwd = 4)
+ROCellipse(fit.t1, lty = 4, pch = 2, col = 'blue',add = TRUE, lwd = 4)
+points(fpr(DTI), sens(DTI), pch = 2, col = 'green', cex = 4, lwd = 4)
+points(fpr(both), sens(both), pch = 2, cex = 4, lwd = 2)
+points(fpr(FC), sens(FC), pch = 2, col = 'red', cex = 4, lwd = 2)
+points(fpr(T1), sens(T1), pch = 2, col = 'blue', cex = 4, lwd = 2)
+#legend("bottomright", c("DTI", "Multimodal", "FC", "T1"), pch = 2, lty = 1:4, col = c('green', 'black', 'red','blue'), cex = 2)
+#dev.off()
+```
+
+
+
+
