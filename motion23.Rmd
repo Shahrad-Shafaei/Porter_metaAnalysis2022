@@ -1,0 +1,275 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+---
+title: "Final_Analysis"
+author: "Alexis Porter"
+date: "8/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Construct 2X2 matrix based on sensitivity/specificity scores
+
+|        Tested          |  SZ| CON| 
+|:-----------------|----:|---:|
+|SZ         | $TP$|   $FP$|  
+|Con     | $FN$|   $TN$|  
+|Total       | $n_{SZ}$|   $n_{CON}$|  
+
+
+$TP = Sensitivity*n_{SZ}$ \
+$FP = n_{CON}*(1-Specificity)$ \
+$FN = n_{SZ} - TP$ \
+$TN = n_{CON} - FP$ \
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+library(car)
+library(cutpointr)
+library(tidyverse)
+library(ggplot2)
+library(metafor)
+library(dmetar)
+#motion contamination FC only studies includes overlapping
+motionFC=read_csv('~/Desktop/meta_analysis/FinalSub2023/code/FC_analysis23.csv') %>%
+  mutate(
+         Atlas = factor(Atlas),
+         Atlas_type = factor(Atlas_type),
+         overlap_simple= factor(overlap_simple),
+         GSR = factor(GSR, levels = c(0,1), labels = c('No','Yes')),
+         Atlas_cond = factor(Atlas_condensed), 
+         params=factor(process),
+         names = Coded_inR,
+         names(names),
+         TP = round(Sensitivity * Scz),
+         FP = round(HC*(1-Specificity)),
+         FN = Scz - TP,
+         TN = HC - FP,
+         N = Scz+HC,
+         tpr=tpr(TP, FN),
+         fpr = fpr(FP, TN))
+#no overlapping datasets
+incFC_no_over= motionFC %>%
+  filter(overlap_simple == 'no')
+#no outliers
+incFC_no_out = motionFC %>%
+  filter(find.outlier23 == 0 )
+
+ext_motionFC=read_csv('~/Desktop/meta_analysis/FinalSub2023/code/external_only_FCanalysis23.csv') %>%
+  mutate(
+         Atlas = factor(Atlas),
+         Atlas_type = factor(Atlas_type),
+         overlap_simple= factor(overlap_simple),
+         GSR = factor(GSR, levels = c(0,1), labels = c('No','Yes')),
+         Atlas_cond = factor(Atlas_condensed), 
+         params=factor(process),
+         names = Coded_inR,
+         names(names),
+         TP = round(Sensitivity * Scz),
+         FP = round(HC*(1-Specificity)),
+         FN = Scz - TP,
+         TN = HC - FP,
+         N = Scz+HC,
+         tpr=tpr(TP, FN),
+         fpr = fpr(FP, TN))
+
+
+
+```
+
+
+```{r}
+
+dat<- escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=motionFC,
+              slab=paste(Coded_inR)) 
+res.FC.int <- rma(yi, vi, data=dat, method = 'EE', slab=dat$Coded_inR)
+find.outliers(res.FC.int)
+
+
+
+dat<- escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=ext_motionFC,
+              slab=paste(Coded_inR)) 
+res.FC.ext <- rma(yi, vi, data=dat, method = 'EE', slab=dat$Coded_inR)
+find.outliers(res.FC.ext)
+
+```
+
+
+
+```{r}
+detach("package:metafor", unload=TRUE) 
+#sometimes you have to detach package here to get mada to run
+```
+
+```{r,warning=FALSE,message=FALSE}
+library(mada)
+
+#motion FC analysis 
+#total noise
+
+fit.int <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+#edges
+fit.edges <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ motion, method = "ml")
+#summary(fit.edges)
+anova(fit.edges, fit.int)
+#distance
+fit.dist <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ distance, method = "ml")
+#summary(fit.dist)
+anova(fit.dist, fit.int)
+
+fit.total <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.total, fit.int)
+
+fit.params <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ params, method = "ml")
+anova(fit.params, fit.int)
+
+fit.atlas <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ Atlas_cond, method = "ml")
+anova(fit.atlas, fit.int)
+
+#overlapping data
+fit.overlap <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ overlap_simple, method = "ml")
+anova(fit.overlap, fit.int)
+```
+
+
+```{r}
+
+#internal all data 
+fit.int <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+fit.noise_total <- reitsma(motionFC, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.int, fit.noise_total)
+#summary(fit.noise_total) 
+#external data
+
+fit.int <- reitsma(ext_motionFC, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+fit.overlap <- reitsma(ext_motionFC, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.overlap, fit.int)
+
+
+#no outliers
+fit.int <- reitsma(incFC_no_out, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+fit.overlap <- reitsma(incFC_no_out, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.overlap, fit.int)
+
+
+#no overlap data
+fit.int <- reitsma(incFC_no_over, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+fit.overlap <- reitsma(incFC_no_over, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.overlap, fit.int)
+
+```
+
+```{r,warning=FALSE,message=FALSE}
+#remove overlapping datasets
+
+#motion FC analysis 
+#total noise
+fit.int <- reitsma(mot_indep, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+fit.noise_total <- reitsma(mot_indep, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.int, fit.noise_total)
+#summary(fit.noise_total) 
+
+#edges
+fit.edges <- reitsma(mot_indep, formula = cbind(tsens, tfpr) ~ prc80_edge, method = "ml")
+#summary(fit.edges)
+anova(fit.edges, fit.int)
+
+#distance
+#significant
+fit.dist <- reitsma(mot_indep, formula = cbind(tsens, tfpr) ~ prc20_distanceweight, method = "ml")
+summary(fit.dist)
+anova(fit.dist, fit.int)
+
+#depending on the atlas does result in sig diff results (p<.0001 for ICA compared to AAL90) 
+#Decrease in sensitivity
+fit.atlas <- reitsma(mot_indep, formula = cbind(tsens, tfpr) ~ Atlas_cond, method = "ml")
+anova(fit.atlas, fit.int)
+summary(fit.atlas)
+
+
+```
+
+
+```{r}
+#outlier removal
+
+#motion FC analysis 
+#total noise
+fit.int <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ 1, method = "ml")
+
+fit.noise_total <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ noise_total, method = "ml")
+anova(fit.int, fit.noise_total)
+#summary(fit.noise_total) 
+
+#edges
+fit.edges <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ prc80_edge, method = "ml")
+#summary(fit.edges)
+anova(fit.edges, fit.int)
+#distance
+#significant again
+fit.dist <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ prc20_distanceweight, method = "ml")
+summary(fit.dist)
+anova(fit.dist, fit.int)
+
+fit.atlas <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ Atlas_cond, method = "ml")
+anova(fit.atlas, fit.int)
+
+#overlapping data
+fit.overlap <- reitsma(mot_out, formula = cbind(tsens, tfpr) ~ overlap_simple, method = "ml")
+anova(fit.overlap, fit.int)
+
+```
+Figures
+
+
+
+
+```{r,fig.width=25, fig.height=10}
+p3 <-
+  ggplot(motionFC, aes(fpr, tpr)) +
+  geom_point(aes(fill = noise_total, size = N), colour = 'black',shape = 21, alpha = .8) +
+  xlim(0, 1) +
+  ylim(0,1) +
+  labs(size = 'Sample Size', x = 'False Positive Rate', y = "Sensitivity")+
+  scale_size(range=c(6,15),breaks=c(25,50,75,100,200,500),labels=c("25","50","75","100","200","500"),guide="legend") +
+  geom_abline(coef = c(0,1), lty = 2) +
+    scale_fill_gradient2(name = 'Motion\nContamination', limits = c(0,6), breaks = c(1,3,5), 
+  low = "black",
+  mid = "grey", 
+  high = "purple4", midpoint = 3) +
+    theme(axis.text.x = element_text(size = 20),
+        axis.title.x = element_text(size = 30),
+        axis.text.y = element_text(size = 20),
+        axis.title.y = element_text(size = 30),
+    legend.title=element_text(size=25), 
+    legend.text=element_text(size=20)) 
+
+
+p4<-ggplot() +
+  geom_point(data = motionFC, aes(noise_total, fpr, color = process, shape = GSR), size = 5) +
+  geom_smooth(data = motionFC, aes(noise_total, fpr),method = lm, se = FALSE)+
+  labs(x = 'Motion Contamination Potential', y = 'False Positive Rate')+
+  scale_shape_manual(name = "GSR", values = c(19,1))+
+  scale_color_discrete(name = "Preprocessing\nMethods") +
+  scale_y_continuous(limits = c(0,.75),breaks = seq(0,.7, by =.20), labels = scales::percent_format(scale = 100)) +
+  theme(axis.text.x = element_text(size = 20),axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 30),
+            legend.title=element_text(size=25), 
+    legend.text=element_text(size=20)) 
+p3+p4
+
+ggsave('~/Desktop/meta_analysis/home_response/resub/updatedFigs23/sample_size_motion.png')
+```
+
+

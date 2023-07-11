@@ -1,0 +1,146 @@
+---
+title: "Supplement"
+author: "Alexis Porter"
+date: "11/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r}
+#Packages
+library(tidyverse)
+library(data.table)
+library(patchwork)
+library(car)
+library(cutpointr)
+library(tidyverse)
+library(ggplot2)
+library(metafor)
+library(scales)
+library(dplyr)
+avg=read_csv('~/Desktop/meta_analysis/home_response/internal_only23.csv') %>%
+  mutate(imaging = factor(imaging, levels = c("T1", "DTI", "FC", "Multimodal")),  
+         mL_method = factor(mL_method),
+         imaging_spec = factor(imaging_spec),
+         reporting_validation_set = factor(reporting_validation_set),
+         names = Study,
+         names(names), 
+         TP = round(sensitivity * n1),
+         FP = round(n2*(1-specificity)),
+         FN = n1 - TP,
+         TN = n2 - FP,
+         N = n1 + n2,
+         tpr = tpr(TP, FN),
+         fpr = fpr(FP, TN))
+avg = avg[order(avg$imaging, 5000-avg$Year),]
+#remove studies that have overlapping dataset since we are using the average and remove outliers identified via CI 95%
+internal_avg <- avg %>%
+  filter(Data_overlap==0 & overlap_outliers == 0) 
+#remove studies that have overlapping dataset, keep pooled, and remove outliers identified via CI 95%
+pool <- avg %>%
+  filter(include_pool==1) 
+
+
+#overlapping datasets to make forest plot
+over <- avg %>%
+  filter(Data_overlap_avg==1) %>%
+  mutate(Dataset = factor(Dataset, levels = c("BRNO", "Cobre", "NAMIC", "W. China")),  )
+over = over[order(over$Dataset, 5000-over$Year),]
+
+
+pool_int=avg %>%
+  filter(include_pool==1 &report_training == 1)
+pool_int= pool_int[order(pool_int$imaging, 5000-pool_int$Year),]
+#report training data only and no outliers
+int_no_outliers = pool_int %>%
+  filter(find.outlier23 == 0 )
+```
+
+
+
+```{r,fig.width=35, fig.height=25,warning=FALSE,message=FALSE}
+#Forest plot after outlier removal
+### fit random-effects model
+over_Dat = escalc(measure="OR", ai=TP, bi=FN, ci=FP, di=TN, data=over,
+              slab=paste(Study))
+
+over_Dat %>%
+  mutate(factor(Dataset))
+res <- rma(yi, vi, data=over_Dat, measure = "OR")
+### a little helper function to add Q-test, I^2, and tau^2 estimate info
+mlabfun <- function(text, res) {
+   list(bquote(paste(.(text),
+      " (Q = ", .(formatC(res$QE, digits=2, format="f")),
+      ", df = ", .(res$k - res$p),
+      ", p ", .(metafor:::.pval(res$QEp, digits=2, showeq=TRUE, sep=" ")), "; ",
+      I^2, " = ", .(formatC(res$I2, digits=1, format="f")), "%, ",
+      tau^2, " = ", .(formatC(res$tau2, digits=2, format="f")), ")")))}
+ 
+### set up forest plot (with 2x2 table counts added; the 'rows' argument is
+### used to specify in which rows the outcomes will be plotted) 
+
+
+forest(res, xlim=c(-16, 15),efac=c(0,1), #steps = 5,
+       ilab=cbind(TP, FN, FP, TN), ilab.xpos=c(-5.5,-4.5,-3.5,-2.5), alim = c(-1,15), cex.lab = 2,refline = 1, at=c(-1,1, 2.35, 4.9, 7.45, 10),
+       cex=3, ylim=c(-5, 21), order=order(Dataset), rows=c(3:5,8:10, 13:14, 17:18),
+       mlab=mlabfun("Pooled Estimate", res),header="Author(s)\nand Year", xlab = "")
+
+### add additional column headings to the plot
+text(c(-5.5,-4.5,-3.5,-2.5), 20, c("TP", "FN", "FP", "TN"), font =2 , cex = 3)
+text(c(-5,-3), 21.5, c("Scz", "Control"), cex = 3.5, font = 2)
+
+
+ 
+### add text for the subgroups
+text(-16, c(5.6,10.6,14.6, 18.6), font = 2, pos=4, cex = 3, c("BRNO",
+                               "Cobre",
+                               "NAMIC",
+                               "W. China"))
+ 
+
+
+### fit random-effects model in the three subgroups
+res.s <- rma(yi, vi, subset=(Dataset=="Cobre"), data=over_Dat)
+res.r <- rma(yi, vi, subset=(Dataset=="BRNO"), data=over_Dat)
+res.a <- rma(yi, vi, subset=(Dataset=="NAMIC"),  data=over_Dat) 
+res.m <- rma(yi, vi, subset=(Dataset=="W. China"),  data=over_Dat) #top is T1
+ 
+### add summary polygons for the three subgroups
+addpoly(res.s, row=6.5, mlab=mlabfun("Model for Cobre", res.m), cex = 3, efac = 0.5)
+addpoly(res.r, row=1.5, mlab=mlabfun("Model for BRNO", res.s), cex =3,efac = 0.5 )
+addpoly(res.a, row= 11.5, mlab=mlabfun("Model for NAMIC", res.r), cex = 3,efac = 0.5)
+addpoly(res.m, row= 15.5, mlab=mlabfun("Model for W. China", res.a), cex = 3,efac = 0.5)
+#addpoly(res, row = 2, mlab=mlabfun("Model for All Studies", res), cex = 3,efac = 0.5)
+### fit meta-regression model to test for subgroup differences
+#res <- rma(yi, vi, mods = ~imaging, data=dat)
+
+```
+
+```{r}
+#FDR test 
+p=c(.02,.4,.006,.06,.01,.3)#,.02,.2,.1,.2,.2,1)
+adjusted.p <- p.adjust(p, "fdr")
+adjusted.p
+```
+
+```{r}
+library(diptest)
+
+
+multi <- internal_avg %>%
+  filter(imaging=="Multimodal") 
+#ggplot()+
+#  geom_histogram(aes(x=sensitivity), data = multi)
+#ggplot()+
+#  geom_histogram(aes(x=specificity), data = multi)
+
+
+ dip.test(multi$sensitivity)
+ dip.test(multi$specificity)
+```

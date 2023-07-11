@@ -1,0 +1,100 @@
+Study,Year,Dataset,Data_pool,find.outlier23,Average_studies,Data_overlap,Data_overlap_avg,include_pool,include,include_no_overlap_youngest,young_outlier,overlap_outliers,imaging_spec,reporting_validation_set,report_training,diagnosis,sensitivity,specificity,n1,n2,imaging,mL_method,mL,CV,flagged_outlier,gender_n1,gender_n2,age_n1,age_n2,mean_gender,mean_age,deep
+"Davatzikos et al., 2005",2005,Original,Original,1,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.739,0.873,69,79,T1,SVM,linear,LOO,0,0.333333333,0.481012658,29.9,28.2,0.407172996,29.05,n
+"Rathi et al., 2010",2010,Original,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,FES,0.79,0.78,21,20,DTI,KNN,nonlinear,TTS,0,0.19,0.25,21.21,22.47,0.22,21.84,n
+"Ardekani et al., 2011",2011,Robinson,Original,1,0,0,0,1,1,1,1,1,DTI,0,1,Scz,0.96,0.96,50,50,DTI,LDA,nonlinear,TTS,0,0.32,0.32,30.3,31.2,0.32,30.75,n
+"Karageorgiou et al., 2011",2011,MCIC,Original,0,0,0,0,1,1,1,0,0,T1,0,1,FEP,0.661,0.7445,28,47,T1,LDA,linear,LOO,0,0.214285714,0.425531915,24.32,26.38,0.319908815,25.35,n
+"Tang et al., 2012",2012,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.864,1,22,22,FC,SVM,linear,LOO,0,0.31,0.31,24.54,26.09,0.31,25.315,n
+"Niewehnhuis et al., 2012",2012,Boos,Original,0,0,0,0,1,1,1,0,0,T1,1,1,Scz,0.781,0.724,128,111,T1,SVM,linear,LOO,0,0.27,0.28,30.87,30.87,0.275,30.87,n
+"Bansal et al., 2012",2012,Original,Original,1,0,0,0,1,1,1,1,1,T1,1,1,Scz,0.913,0.945,65,40,T1,KNN,nonlinear,LOO,0,0.36,0.45,42.16,32.42,0.405,37.29,n
+"Pettersson-Yeo et al., 2013",2013,Original,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,FEP,0.6842,0.6316,19,19,DTI,SVM,linear,LOO,0,0.52,0.52,22.42,23.32,0.52,22.87,n
+"Arbabshirani et al., 2013",2013,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.7317,0.8839,28,28,FC,KNN,nonlinear,TTS,0,0,0,39.7,36.5,0,38.1,y
+"Hu et al., 2013",2013,NAMIC,NAMIC,0,12,1,1,0,0,1,0,0,FC,0,1,Scz,0.75,0.8,10,10,FC,SVM,linear,LOO,0,,,,,,,n
+"Su et al., 2013",2013,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.8226,0.781,32,32,FC,SVM,linear,LOO,0,0.21,0.28,24,25.01,0.245,24.505,n
+"Yu et al., 2013a",2013,Original,Original,1,0,0,0,1,1,1,1,1,FC,0,1,Scz,0.928,0.909,32,38,FC,SVM,linear,LOO,1,0.218,0.289,24,24.44,0.2535,24.22,n
+"Yu et al., 2013b",2013,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.76,0.875,24,22,FC,SVM,linear,LOO,0,0.5,0.5,25.36,25.48,0.5,25.42,n
+"Fekete et al., 2013",2013,NAMIC,NAMIC,0,12,1,1,0,0,0,0,0,FC,0,1,Scz,0.8575,0.9,8,10,FC,SVM+many,linear,LOO,0,,,,,,,n
+"Iwabuchi et al., 2013",2013,Original,Original,0,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.658,0.725,19,20,T1,SVM,linear,LOO,0,0.52,0.52,22.42,23.32,0.52,22.87,n
+"Borgwardt et al., 2013",2013,FePsy,Original,1,0,0,0,1,1,1,0,0,T1,0,1,FEP,0.87,0.864,23,22,T1,SVM,linear,Fold,0,0.26,0.41,26.78,23,0.335,24.89,n
+"Schnack et al., 2014",2014,Scheewe,Original,1,0,0,0,1,1,1,1,1,T1,1,1,Scz,0.8715,0.9165,66,66,T1,SVM,linear,Fold,1,0.63,0.63,36.5,37.7,0.63,37.1,n
+"Chyzhyk et al., 2015",2015,Shinn,Original,1,0,0,0,1,1,1,1,1,FC,0,1,Scz,0.6093,0.65,40,28,FC,SVM,linear,Fold,1,0.414,0.39,38.5,39,0.402,38.75,n
+"Kaufmann et al., 2015",2015,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.4168,0.9211,71,196,FC,LDA,linear,LOO,0,0.408,0.418,28.2,31.5,0.413,29.85,n
+"Sabuncu et al., 2015",2015,Cobre,Cobre,0,20,1,0,0,0,1,1,0,T1,0,1,Scz,0.605,0.628333333,50,73,T1,SVM+many,linear,Fold,1,,,,,,,n
+"Rashid et al., 2016",2016,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.8125,0.6896,60,61,FC,SVM,linear,Fold,0,0.216,0.459,35.85,35.44,0.3375,35.645,n
+"Kim et al., 2016",2016,Cobre,Cobre,0,22,1,0,0,0,0,0,0,FC,0,1,Scz,0.7456877,0.78515,50,50,FC,DNN,nonlinear,Fold,0,,,,,,,y
+"Lu et al., 2016",2016,Original,Original,1,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.802,0.853,41,42,T1,SVM,linear,LOO,0,0.414634146,0.357142857,25.68,26.02,0.385888502,25.85,n
+"Cabral et al., 2016",2016,Cobre,Cobre,0,23,1,1,0,0,0,0,0,T1+FC,0,1,Scz,0.788,0.712,71,74,Multimodal,SVM,linear,Fold,0,,,,,,,n
+"Janousova et al., 2016",2016,BRNO,BRNO,0,30,1,1,0,0,1,0,0,T1,0,1,FES,0.7329,0.8039,52,52,T1,SVM,linear,LOO,0,,,,,,,n
+"Yun et al., 2016",2016,Original,Original,1,0,0,0,1,1,1,1,1,T1,0,1,FEP,0.921,0.9075,27,96,T1,SVM,linear,TTS,1,0.66,0.4,22.48,24.07,0.53,23.275,n
+"Chen et al., 2017",2017,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,DN-FES,0.8,0.871,35,31,FC,SVM,linear,LOO,0,0.42,0.58,15.6,15.4,0.5,15.5,n
+"Qureshi et al., 2017",2017,Cobre,Cobre,0,23,1,1,0,0,0,0,0,T1+FC,0,1,Scz,0.985,0.9866,72,72,Multimodal,SVM,linear,Fold,1,,,,,,,n
+"Salvador et al., 2017",2017,Original,Original,1,0,0,0,1,1,1,1,1,T1,0,1,Scz,0.3,0.65,128,127,T1,SVM+many,linear,LOO,0,0.421875,0.42519685,41.5,39.8,0.423535925,40.65,n
+"Mikolas et al., 2018",2018,ESO,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,FES,0.5974,0.6494,77,77,DTI,SVM,linear,LOO,0,0.44,0.44,28.51,28.32,0.44,28.415,n
+"Zhu et al., 2018",2018,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.9,0.704,24,21,FC,LDA,nonlinear,LOO,0,0.58,0.71,30.78,35.29,0.645,33.035,y
+"Huang et al., 2018",2018,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,FES,0.902,0.652,41,23,FC,SVM,linear,LOO,0,0.46,0.43,23.5,25.61,0.445,24.555,n
+"Moghimi et al., 2018",2018,Original,Original,1,0,0,0,1,1,1,1,1,FC,0,1,FES,0.595,0.745,82,88,FC,SVM,linear,LOO,1,0.3,0.3,31.35,31.75,0.3,31.55,n
+"Cui et al., 2018",2018,Original,Original,0,0,0,0,1,1,1,0,0,FC,1,1,FEP,0.88,0.7619,52,66,FC,SVM,linear,Fold,0,0.403846154,0.5,26,29,0.451923077,27.5,n
+"Kottaram et al., 2018",2018,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.868,0.786,41,41,FC,SVM,linear,Fold,0,0.31,0.41,40.9,38.3,0.36,39.6,n
+"Guo et al., 2018",2018,Original,Original,1,0,0,0,1,1,1,0,0,FC+sMRI+DTI,0,1,Scz,0.8562,0.8611,161,168,Multimodal,SVM,linear,Fold,0,0.59,0.57,44.99,43.17,0.58,44.08,n
+"Lee et al., 2018",2018,Original,Original,1,0,0,0,1,1,1,0,0,T1+DTI,0,1,Scz,0.8855,0.952,47,23,Multimodal,SVM,linear,LOO,0,0.617,0.652,28.68,29.7,0.6345,29.19,n
+"Pinaya et al., 2018",2018,NUDAST,Original,0,0,0,0,1,1,1,1,1,T1,0,1,Scz,0.529,0.65,40,35,T1,SVM,linear,Fold,1,0.26,0.48,25.5,26.7,0.37,26.1,y
+"Zeng et al., 2018",2018,"Xijing, AMU, Xiangya, Cobre, WUSTL",Pooled,0,0,1,0,1,0,0,0,0,FC,1,1,Scz,0.7908,0.8215,474,607,FC,SVM+many,linear,LOO,0,,,,,,,y
+"Dwyer et al., 2018",2018,"MRN, Cobre",Cobre,0,20,1,0,0,0,0,0,0,T1,1,1,Scz,0.704,0.662,71,74,T1,SVM,linear,Fold,0,,,,,,,n
+"Monte-Rubio, et al., 2018",2018,Cobre,Cobre,0,20,1,0,0,0,0,0,0,T1,0,1,Scz,0.6383,0.6255,72,74,T1,GP ,nonlinear,Fold,0,,,,,,,n
+"Chin et al., 2018",2018,Original,Original,1,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.9225,0.741,57,28,T1,SVM,linear,TTS,0,0.33,0.33,41.3,41.3,0.33,41.3,n
+"Chen et al., 2018",2018,Original,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,Scz,0.75,0.76,60,60,DTI,KNN,nonlinear,TTS,0,0.5,0.5,29.355,29.12,0.5,29.2375,n
+"Deng et al., 2019",2019,Original,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,FES,0.721,0.75,65,60,DTI,RF,nonlinear,TTS,0,0.508,0.483,27.6,27.2,0.4955,27.4,n
+"Jing et al., 2019",2019,Original,Original,0,0,0,0,1,1,1,0,0,FC,1,1,Scz,0.875,0.8,60,50,FC,SVM,linear,LOO,0,0.45,0.42,27.83,25.52,0.435,26.675,n
+"Zhu et al., 2019",2019,"Huaxi, NBH, Cobre, Nottingham, Taiwan, Xiangya",Pooled,1,0,1,0,1,0,1,0,0,FC,0,1,Scz,0.819,0.845,439,426,FC,SVM+many,linear,Fold,0,,,,,,,y
+"Yan et al., 2019",2019,W. China,W. China,0,42,1,1,0,0,1,0,0,FC,1,1,Scz,0.77,0.76,558,542,FC,nonlinear,CNN+many,Fold,0,,,,,,,y
+"Matsubara et al., 2019",2019,UCLA,Original,1,0,1,0,1,1,1,1,0,FC,0,1,Scz,0.529,0.799,48,117,FC,Deep,nonlinear,Fold,1,0.229166667,0.401709402,36.2,31,0.315438035,33.6,y
+"Zhuang et al., 2019",2019,Cui,Original,0,0,0,0,1,1,1,0,0,FC+FALFF+sMRI+DTI,0,1,DN-FES,0.9375,0.6583,40,29,Multimodal,SVM,linear,Fold,0,0.45,0.51,27.13,27.03,0.48,27.08,n
+"Liang et al., 2019",2019,Original,Original,0,0,0,0,1,1,1,0,0,T1+DTI,1,1,FES,0.7592,0.7249,98,106,Multimodal,Tree,nonlinear,TTS,0,0.418367347,0.509433962,24.75,25.97,0.463900655,25.36,n
+"Xiao et al., 2019",2019,Original,Original,1,0,0,0,1,1,1,0,0,T1,0,1,DN-FES,0.7995,0.86,163,163,T1,SVM,linear,Fold,0,0.54601227,0.472392638,23.54,23.61,0.509202454,23.575,n
+"Ji  et al., 2019",2019,"AMU12, SWU, NKI, Cobre",Pooled,0,0,1,0,1,0,0,0,0,FC,1,1,Scz,0.8,0.72,230,185,FC,KNN,linear,LOO,0,,,,,,,n
+"Vyskovsky et al., 2019",2019,BRNO,BRNO,0,30,1,1,0,0,0,0,0,T1,0,1,FES,0.63545,0.687,52,52,T1,Deep,nonlinear,LOO,0,,,,,,,y
+"Qureshi et al., 2019",2019,Cobre,Cobre,0,23,1,1,0,0,0,0,0,T1+FC,0,1,Scz,0.9862,0.9749,72,72,Multimodal,nonlinear,CNN,Fold,1,,,,,,,y
+"Yang et al., 2019",2019,"Cobre, UCLA, WUSTL",Pooled,0,0,1,0,1,0,0,0,0,FC,0,1,Scz,0.64,0.82,153,250,FC,nonlinear,NN,Fold,0,,,,,,,y
+"Schwarz et al., 2019",2019,"CIMH, HUBIN, Kasp, UIO, UNIBA",Pooled,0,0,0,0,1,1,1,1,1,T1,1,0,Scz,0.6425,0.6418,375,1729,T1,SVM+many,linear,LOO,1,0.32,0.543666859,34.45,31.76,0.43183343,33.105,n
+"Wang et al., 2020",2020,Original,Original,0,0,0,0,1,1,1,0,0,DTI,0,1,SOC,0.59,0.78,28,30,DTI,SVM,linear,Fold,0,0.392857143,0.6,22.32,22.47,0.496428572,22.395,n
+"Liu et al., 2020",2020,Original,Original,0,0,0,0,1,1,1,0,0,FC,0,1,FES,0.7361,0.908,38,38,FC,SVM,linear,LOO,0,0.5,0.5,26.3,25.4,0.5,25.85,n
+"Zhao et al., 2020a",2020,Original,Original,1,0,0,0,1,1,1,0,0,FC+sMRI+DTI,0,1,Scz,0.8962,0.9197,135,148,Multimodal,SVM,linear,Fold,0,0.57,0.56,43.9,41.9,0.565,42.9,n
+"Yamamoto et al., 2020",2020,Nagoya Toyama University,Pooled,0,0,0,0,1,1,1,0,0,T1,1,1,Scz,0.616,0.8285,99,99,T1,SVM,linear,Fold,0,0.505050505,0.474747475,33.45,31.7,0.48989899,32.575,n
+"Chang et al., 2020",2020,"TAMI Taiwan, Beitou",Original,1,0,0,0,1,1,1,1,1,T1,1,1,Scz,0.8491,0.8934,200,200,T1,EDNN,nonlinear,TTS,1,0.5075,0.5075,43.6,43.6,0.5075,43.6,y
+"Vieira et al., 2020",2020,"SantanderA/B, London, Chengdu, Netherlands",Pooled,1,0,0,0,1,1,1,1,1,T1,1,1,FEP,0.5969,0.5465,373,443,T1,SVM+many,linear,Fold,1,0.549597855,0.406320542,26.82,27.58,0.477959199,27.2,y
+"Zhao et al., 2020b",2020,W. China,W. China,0,42,1,1,0,0,0,0,0,FC,1,1,Scz,0.734,0.7294,558,542,FC,GAN,nonlinear,Fold,0,,,,,,,y
+"Huang et al., 2020",2020,"Cobre, Taiwan",Original,0,0,0,0,1,0,0,0,0,DTI,0,1,Scz,0.67,0.71,18,19,DTI,KNN,nonlinear,LOO,0,0.444444444,0.315789474,31.4,33.9,0.380116959,32.65,y
+"Lei et al., 2020",2020,"Cobra, UCLA, Maastricht, Dublin, W China Sichuan",Pooled,0,0,1,0,1,0,0,0,0,FC,0,1,Scz,0.79,0.82,295,452,FC,SVM+many,linear,LOO,1,,,,,,,y
+"Yoshihara et al., 2020",2020,"Cobre, TOP, JHU",Kyoto,0,0,0,0,1,0,0,0,0,FC,1,1,SSD,0.72,0.79,68,102,FC,Log,linear,LOO,0,0.514705882,0.392156863,38.4,31.1,0.453431373,34.75,n
+"Lei et al., 2020b",2020,"Cobre, UCLA, Maastricht, Dublin, W. China",Pooled,1,0,1,0,1,0,0,0,0,FC,1,1,Scz,0.4515,0.7201,295,452,FC,SVM,linear,Fold,0,,,,,,,n
+"Xiang et al., 2020",2020,Cobre,Cobre,0,22,1,0,0,0,0,0,0,FC,0,1,Scz,0.9296,0.9324,71,74,FC,SVM,linear,LOO,1,,,,,,,n
+"Chen et al., 2020",2020,Cobre,Cobre,0,20,1,0,0,0,0,0,0,T1,0,1,Scz,0.740775,0.69959,34,34,T1,SVM+many,linear,LOO,0,,,,,,,n
+"Zhu et al., 2020",2020,"Cobre, UCLA",Cobre,0,22,1,0,0,0,0,0,0,FC,1,1,Scz,0.62,0.54,72,75,FC,Forest,linear,Fold,1,,,,,,,n
+"Masoudi et al., 2020",2020,Cobre,Cobre,0,0,1,0,0,0,0,0,0,DTI+FC,0,1,Scz,0.99,0.97,64,81,Multimodal,nonlinear,CNN+many,Fold,1,,,,,,,y
+"Wang et al., 2020",2020,Cobre,Cobre,0,22,1,0,0,0,0,0,0,FC,0,1,Scz,0.79,0.68,60,71,FC,nonlinear,CNN,Fold,0,,,,,,,y
+"Nemoto et al., 2020",2020,"OsakaABC, TokyoB, Toyama, Kyushu",Pooled,0,0,0,0,1,1,1,0,0,T1,1,1,Scz,0.59,0.8,446,1157,T1,LDA,linear,TTS,0,0.387596899,0.537128713,36.5,35.5,0.462362806,36,n
+"Morgan et al., 2021",2021,"Maastricht, Dublin",Pooled,0,0,1,0,1,1,1,0,0,DTI,0,1,Scz,0.6625,0.5425,98,141,DTI,GP ,nonlinear,Fold,0,0.33,0.61,27.9,29.2,0.47,28.55,n
+"Lee et al., 2021",2021,Original,Original,1,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.8642,0.8268,220,220,FC,SVM,linear,Fold,0,0.45,0.5,31.7,31.8,0.475,31.75,n
+"Faria et al., 2021",2021,Kamath,Original,0,0,0,0,1,1,1,0,1,FC+sMRI+DTI,0,1,FEP,0.80225,0.45425,87,62,Multimodal,SVM,linear,LOO,1,0.16,0.3,22.5,23.4,0.23,22.95,n
+"Lin et al., 2021",2021,"UCLA, internal collection",Original,1,0,0,0,1,1,1,1,1,FC+sMRI+DTI,1,1,Scz,0.9288,0.9619,99,69,Multimodal,SVM,linear,Fold,0,0.606060606,0.449275362,29.84,32.76,0.527667984,31.3,n
+"Rodrigue et al., 2021",2021,ISSMS Olin BSNIP,Pooled,1,0,0,0,1,1,1,1,1,FC+DTI,1,1,Scz,0.55,0.575,414,288,Multimodal,SVM+many,linear,TTS,1,0.42,0.51,35.1,37.1,0.465,36.1,n
+"Zhou et al., 2021",2021,Original,Original,0,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.7347,0.6471,49,34,T1,SVM,linear,LOO,0,0.51,0.55,16.02,16.32,0.53,16.17,n
+"Gallos et al., 2021",2021,Cobre,Cobre,0,22,1,0,0,0,0,0,0,FC,0,1,Scz,0.5757,0.7331,72,74,FC,SVM+many,nonlinear,Fold,1,,,,,,,y
+"Latha et al., 2021",2021,"NAMIC, Cobre",Pooled,1,0,1,0,1,0,0,0,0,T1,0,1,SSD,0.916666667,0.892857143,112,84,T1,linear,FuzzySVM,Folds,1,,,,,,,n
+"Oh et al., 2022",2022,Original,Original,1,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.83,0.83,171,161,FC,nonlinear,CNN,Fold,0,0.47,0.54,34.38,33.73,0.505,34.055,y
+"Wang et al., 2022",2022,Original,Original,0,0,0,0,1,1,1,0,0,FC+sMRI+DTI,0,1,Scz,0.5716,0.8436,79,205,Multimodal,SVM,linear,Fold,1,0.68,0.53,33.21,32.52,0.605,32.865,n
+"Lei et al., 2022",2022,"Huaxi, UCLA, Dublin, Maastricht, Cobre",Pooled,1,0,1,0,1,0,0,0,0,FC,1,1,Scz,0.74,0.976,505,907,FC,Deep,nonlinear,LOO,1,,,,,,,y
+"Vyskovsky et al., 2022",2022,BRNO,BRNO,0,30,1,1,0,0,0,0,0,T1,0,1,FES,0.587016667,0.546741667,52,52,T1,Deep,nonlinear,TTS,1,,,,,,,y
+"Yuan et al., 2022",2022,Cobre,Cobre,0,22,1,0,0,0,0,0,0,FC,0,1,Scz,0.6425,0.5522,53,67,FC,SVM,linear,Fold,1,,,,,,,n
+"Zhu et al., 2022",2022,Original,Original,0,0,0,0,1,1,1,0,0,T1,1,1,Scz,0.7,0.79,10,28,T1,SVM,linear,Fold,0,0.4,0.411,31.44,29.66,0.4055,30.55,n
+BRNO Combined,,BRNO,BRNO,0,30,0,0,1,1,0,0,0,T1,0,1,FES,0.65,0.67,52,52,T1,,,,,0,0,23,23,0,23,n
+Cobre Multimodal,,Cobre,Cobre,1,23,0,0,1,1,0,0,0,T1+FC+DTI,0,1,Scz,0.93,0.91,72,74,Multimodal,,,,,0.19,0.31,38.1,35.8,0.25,36.95,n
+NAMIC Combined,,NAMIC,NAMIC,0,12,0,0,1,1,0,0,0,FC,0,1,Scz,0.8,0.85,10,10,FC,,,,,0,0,44.1,41.8,0,42.95,n
+W. China Combined,,W. China,W. China,0,42,0,0,1,1,0,0,1,FC,0,1,Scz,0.75,0.74,558,542,FC,,,,,0.47,0.49,27.7,28.6,0.48,28.15,n
+"Skatun et al., 2017",2017,"Kasp, TOP, Hubin",Pooled,0,0,0,0,1,1,1,0,0,FC,1,0,Scz,0.78,0.72725,182,348,FC,LDA,linear,LOO,0,0.33,0.42,36.7,37.86666667,0.375,37.28333334,n
+"Winterburn et al., 2019",2019,"INNN, NUSDAST, CAMH",Pooled,0,0,0,0,1,1,1,1,0,T1,1,0,SSD,0.703,0.616,229,220,T1,SVM+many,linear,Fold,0,0.344978166,0.418181818,31.5,28.26666667,0.381579992,29.88333334,n
+"Serin et al., 2021",2021,Zalensky,Original,0,0,0,0,1,1,1,0,0,FC,1,0,Scz,0.915,0.872,12,15,FC,Tree,nonlinear,Fold,0,0.16,0.06,32.8,33.3,0.11,33.05,n
+"Hu et al., 2022",2022,"NUSDAST, IMH",IMH,0,0,0,0,1,1,1,0,0,DTI+T1,1,1,Scz,0.86,0.56,148,76,Multimodal,CNN+many,nonlinear,Fold,0,0.310810811,0.381578947,32.72,31.33,0.346194879,32.025,y
+"Pinaya et al., 2016",2016,UNIFESP,Original,0,0,0,0,1,1,1,0,0,T1,0,1,Scz,0.76855,0.64805,143,83,T1,SVM+many,nonlinear,Fold,0,0.34,0.33,37.12,35.49,0.335,36.305,n
+"Guo et al., 2017",2017,Original,Original,1,0,0,0,1,1,1,0,0,FC,0,1,Scz,0.9286,0.95,28,40,FC,SVM,linear,LOO,0,0.357142857,0.5,22.93,23.28,0.428571429,23.105,n
+Cobre T1,,Cobre,Cobre,0,20,0,0,1,1,0,0,0,T1,0,1,Scz,0.67,0.65,71,74,T1,,,,,0.19,0.31,38.1,35.8,0.25,36.95,n
+Cobre FC,,Cobre,Cobre,0,22,0,0,1,1,0,0,0,FC,0,1,Scz,0.71,0.7,71,74,FC,,,,,0.19,0.31,38.1,35.8,0.25,36.95,n

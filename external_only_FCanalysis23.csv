@@ -1,0 +1,11 @@
+﻿Coded_inR,Publication Date,imaging_codedR,overlap_simple,overlapping_datasets,find.outlier23,Scz,HC,Sensitivity,Specificity ,GSR,MinRest,Atlas,Atlas_type,motion,distance,prc20_distanceweight,prc80_edge,noise_total,Atlas_condensed,process
+"Lin et al., 2021",2021,both_FC,no,no,0,49,73,0.9429,0.2471,0,8,HB246,both,4,3,0.6,3.2,3.8,HB246,6p
+"Rodrigue et al., 2021",2021,both_FC,Yes,Pooled,1,414,288,0.52,0.55,0,5,HB246,both,1,4,0.8,0.8,1.6,HB246,acompcor
+"Skatun et al., 2017",2017,FC,Yes,Pooled,1,182,348,0.78,0.727,1,6,ICA,Func,1,2,0.4,0.8,1.2,ICA,ICA
+"Cui et al., 2018",2018,FC,no,no,1,108,121,0.78,0.81,1,6,AAL90,Anat,2,5,1,1.6,2.6,AAL90,9p
+"Jing et al., 2019",2019,FC,Yes,Pooled,0,40,40,0.725,0.825,0,8,ICA,Func,2,5,1,1.6,2.6,ICA,9p
+"Serin et al., 2021",2021,FC,no,no,1,12,15,0.915,0.872,0,17,AAL90,Anat,5,3,0.6,4,4.6,AAL90,24p
+"Zeng et al., 2018",2018,FC,Yes,Pooled,1,474,607,0.76,0.76,1,8,Yeo,Func,1,1,0.2,0.8,1,Other,36p
+"Ji  et al., 2019",2019,FC,Yes,Pooled,0,118,100,0.74,0.67,1,5,Finn268,Func,4,3,0.6,3.2,3.8,Other,24p
+"Yoshihara et al., 2020",2020,FC,Yes,Pooled,1,114,175,0.56,0.6,0,6,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,6p
+"Lei et al., 2022",2022,FC,Yes,Pooled,0,505,907,0.73,0.67,1,5,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,24p

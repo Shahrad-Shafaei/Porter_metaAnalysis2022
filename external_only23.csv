@@ -1,0 +1,23 @@
+﻿Study,Year,Dataset,Data_pool,Average_studies,sensitivity,specificity,n1,n2,imaging,find.outlier23,noPool
+"Niewehnhuis et al., 2012",2012,Boos,Original,0,0.71,0.7,155,122,T1,0,1
+"Schnack et al., 2014",2014,Scheewe,Original,0,0.66,0.85,46,43,T1,1,1
+"Dwyer et al., 2018",2018,"MRN, Cobre",MRN,0,0.63,0.75,158,158,T1,0,1
+"Schwarz et al., 2019",2019,"CIMH, HUBIN, Kasp, UIO, UNIBA",Pooled,0,0.6425,0.6418,375,1729,T1,0,1
+"Yamamoto et al., 2020",2020,Nagoya Toyama University,Pooled,0,0.62,0.83,99,99,T1,1,1
+"Chang et al., 2020",2020,"TAMI Taiwan, Beitou",Beitou,0,0.81,0.59,88,44,T1,0,1
+"Vieira et al., 2020",2020,"SantanderA/B, London, Chengdu, Netherlands",Pooled,0,0.7,0.38,513,443,T1,1,1
+"Nemoto et al., 2020",2020,"OsakaABC, TokyoB, Toyama, Kyushu",Pooled,0,0.63,0.75,446,1157,T1,1,1
+"Zhu et al., 2022",2022,Original,Original,0,0.54,0.88,10,28,T1,0,1
+"Winterburn et al., 2019",2019,"INNN, NUSDAST, CAMH",Pooled,0,0.703,0.616,229,220,T1,0,1
+"Cui et al., 2018",2018,Original,Original,0,0.7865,0.8133,108,121,FC,1,1
+"Zeng et al., 2018",2018,"Xijing, AMU, Xiangya, Cobre, WUSTL",Pooled,0,0.76,0.76,474,607,FC,0,0
+"Jing et al., 2019",2019,Original,Original,0,0.725,0.825,40,40,FC,0,1
+"Yan et al., 2019",2019,W. China,W. China,42,0.78,0.73,558,542,FC,0,0
+"Ji  et al., 2019",2019,"AMU2, cobre",Pooled,0,0.74,0.67,118,100,FC,0,1
+"Zhao et al., 2020b",2020,W. China,W. China,42,0.71,0.71,558,542,FC,0,0
+"Yoshihara et al., 2020",2020,"Cobre, TOP, JHU",Pooled,0,0.56,0.6,114,175,FC,1,1
+"Lei et al., 2022",2022,"Huaxi, UCLA, Dublin, Maastricht, Cobre",Pooled,0,0.73,0.67,505,907,FC,0,0
+"Skatun et al., 2017",2017,"Kasp, TOP, Hubin",Pooled,0,0.78,0.72725,182,348,FC,0,1
+"Serin et al., 2021",2021,Zalensky,Original,0,0.915,0.872,12,15,FC,0,1
+W. China Pooled,,W. China,W. China,0,0.75,0.72,558,542,FC,0,1
+"Hu et al., 2022",2022,"NUSDAST, IMH",IMH,0,0.63,0.64,148,76,T1,0,1

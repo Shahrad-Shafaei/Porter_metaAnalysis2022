@@ -1,0 +1,51 @@
+Coded_inR,Publication Date,imaging_codedR,overlap_simple,overlapping_datasets,outlier,find.outlier23,Scz,HC,Sensitivity,Specificity ,GSR,MinRest,Atlas,Atlas_type,motion,distance,prc20_distanceweight,prc80_edge,noise_total,Atlas_condensed,process
+Guo2018,2018,both_FC,no,no,0,1,161,168,0.83215,0.82915,1,8,AAL90,Anat,2,5,1,1.6,2.6,AAL90,9p
+Zhuang2019,2019,both_FC,no,no,0,0,40,29,0.8125,0.6583,0,6,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+Zhao2020_both,2020,both_FC,no,no,0,0,135,148,0.6964,0.7409,0,8,HB246,both,4,3,0.6,3.2,3.8,HB246,6p
+Faria2021,2021,both_FC,no,no,1,1,87,62,0.78075,0.42075,0,7,Faria,Anat,4,5,1,3.2,4.2,Other,tcompcor
+Lin2021,2021,both_FC,no,no,0,0,99,69,0.75,0.88,0,8,HB246,both,4,3,0.6,3.2,3.8,HB246,6p
+Rodrigue2021,2021,both_FC,Yes,Pooled,1,1,414,288,0.65,0.72,0,5,HB246,both,1,4,0.8,0.8,1.6,HB246,acompcor
+Wang2022,2022,both_FC,no,no,1,1,79,205,0.5786,0.727,0,7,Shen268,Func,5,3,0.6,4,4.6,Other,6p
+Tang2012,2012,FC,no,no,0,1,22,22,0.864,1,1,6,WFU Pick,Anat,2,5,1,1.6,2.6,Other,9p
+Arbabshirani2013,2013,FC,no,no,0,0,28,28,0.7317,0.8839,0,5,ICA,Func,3,1,0.2,2.4,2.6,ICA,ICA
+Su2013,2013,FC,no,no,0,0,32,32,0.8226,0.781,0,6,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+Yu2013,2013,FC,no,no,1,1,32,38,0.928,0.909,1,6,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+YuShen2013,2013,FC,no,no,0,0,24,22,0.76,0.875,1,6,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+Chzhyk2015,2015,FC,no,no,1,1,40,28,0.6093,0.65,1,10,ICA,Func,2,5,1,1.6,2.6,ICA,9p
+Kaufmann2015,2015,FC,no,no,0,0,71,196,0.4168,0.9211,0,9,ICA,Func,3,1,0.2,2.4,2.6,ICA,ICA
+Rashid2016,2016,FC,no,no,0,0,60,61,0.8125,0.6896,0,5,ICA,Func,1,3,0.6,0.8,1.4,ICA,36p
+Chen2017,2017,FC,no,no,0,0,35,31,0.8,0.871,0,8,Dosenbach142,Func,1,4,0.8,0.8,1.6,Other,acompcor
+Skatun2017,2017,FC,Yes,Pooled,0,0,182,348,0.78,0.727,1,6,ICA,Func,1,2,0.4,0.8,1.2,ICA,ICA
+Zhu2018,2018,FC,no,no,0,0,24,21,0.9,0.704,1,5,N2NE,Func,2,5,1,1.6,2.6,Other,9p
+Huang2018,2018,FC,no,no,0,0,41,23,0.902,0.652,1,10,AAL90,Anat,1,5,1,0.8,1.8,AAL90,9p
+Moghimi2018,2018,FC,no,no,1,0,82,88,0.595,0.745,0,6,ICA,Func,3,1,0.2,2.4,2.6,ICA,ICA
+Cui2018,2018,FC,no,no,0,0,52,66,0.88,0.7619,1,6,AAL90,Anat,2,5,1,1.6,2.6,AAL90,9p
+Kottaram2018,2018,FC,no,no,0,0,41,41,0.868,0.786,0,8,Shirer,Func,4,3,0.6,3.2,3.8,Other,24p
+Jing2019,2019,FC,no,no,0,0,60,50,0.875,0.8,0,8,ICA,Func,2,5,1,1.6,2.6,ICA,9p
+Liu2020,2020,FC,no,no,0,0,38,38,0.7361,0.908,0,7,Craddock,Func,5,3,0.6,4,4.6,Other,24p
+Lee2021,2021,FC,no,no,1,1,220,220,0.8642,0.8268,1,8,AAL90,Anat,1,3,0.6,0.8,1.4,AAL90,36p
+Serin2021,2021,FC,no,no,0,0,12,15,0.915,0.872,0,17,AAL90,Anat,5,3,0.6,4,4.6,AAL90,24p
+"Oh et al., 2022",2022,FC,no,no,0,1,171,161,0.83,0.83,0,5,AAL90,Anat,4,5,1,3.2,4.2,AAL90,9p
+Hu 2013,2013,FC,Yes,NAMIC,0,0,10,10,0.75,0.8,0,10,Custom,Anat,5,5,1,4,5,Other,9p
+Fekete 2013,2013,FC,Yes,NAMIC,0,0,8,10,0.8575,0.9,1,10,AAL90,Anat,1,5,1,0.8,1.8,AAL90,9p
+Kim 2016,2016,FC,Yes,Cobre,0,0,50,50,0.7456877,0.78515,0,5,AAL90,Anat,1,5,1,0.8,1.8,AAL90,9p
+Cabral 2016,2016,both_FC,Yes,Cobre,1,1,71,74,0.697,1,1,5,AAL90,Anat,2,5,1,1.6,2.6,AAL90,9p
+Qureshi 2017,2017,both_FC,Yes,Cobre,1,1,72,72,0.9304,0.9625,0,6,ICA,Func,3,1,0.2,2.4,2.6,ICA,ICA
+"Zeng et al., 2018",2018,FC,Yes,Pooled,0,1,474,607,0.7908,0.8215,1,8,Yeo,Func,1,1,0.2,0.8,1,Other,36p
+"Zhu et al., 2019",2019,FC,Yes,Pooled,0,0,439,426,0.819,0.845,1,5,AAL90,Anat,1,5,1,0.8,1.8,AAL90,9p
+"Yan et al., 2019",2019,FC,Yes,Pooled,0,0,558,542,0.77,0.76,1,5,ICA,Func,1,5,1,0.8,1.8,ICA,9p
+"Matsubara et al., 2019",2019,FC,Yes,UCLA,1,0,48,117,0.529,0.799,0,7,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,6p
+"Ji  et al., 2019",2019,FC,Yes,Pooled,0,0,230,185,0.8,0.72,1,5,Finn268,Func,4,3,0.6,3.2,3.8,Other,24p
+"Yang et al., 2019",2019,FC,Yes,Pooled,0,0,153,250,0.64,0.82,0,5,AAL90,Anat,5,4,0.8,4,4.8,AAL90,2p
+"Zhao et al., 2020b",2020,FC,Yes,Pooled,0,0,558,542,0.734,0.7294,0,8,ICA,Func,2,1,0.2,1.6,1.8,ICA,ICA
+"Lei et al., 2020",2020,FC,Yes,Pooled,0,1,295,452,0.79,0.82,1,5,AAL90,Anat,2,5,1,1.6,2.6,AAL90,9p
+"Yoshihara et al., 2020",2020,FC,Yes,Kyoto,0,0,68,102,0.72,0.79,0,6,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,6p
+"Lei et al., 2020b",2020,FC,Yes,Pooled,1,1,295,452,0.4515,0.7201,1,6,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,24p
+"Xiang et al., 2020",2020,FC,Yes,Cobre,1,1,71,74,0.9296,0.9324,0,5,HB246,both,5,3,0.6,4,4.6,HB246,6p
+"Zhu et al., 2020",2020,FC,Yes,Cobre,1,1,72,75,0.62,0.54,0,5,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+"Wang et al., 2020",2020,FC,Yes,Cobre,0,0,60,71,0.79,0.68,1,5,AAL90,Anat,5,3,0.6,4,4.6,AAL90,24p
+"Rodrigue et al., 2021",2021,both_FC,Yes,Pooled,1,1,414,288,0.565,0.60625,1,5,HB246,both,1,4,0.8,0.8,1.6,HB246,acompcor
+"Gallos et al., 2021",2021,FC,Yes,Cobre,1,1,72,74,0.5757,0.7331,0,5,ICA,Func,3,1,0.2,2.4,2.6,ICA,ICA
+"Lei et al., 2022",2022,FC,Yes,Pooled,1,1,505,907,0.74,0.976,1,5,AAL90,Anat,4,3,0.6,3.2,3.8,AAL90,24p
+"Yuan et al., 2022",2022,FC,Yes,Cobre,1,1,53,67,0.6425,0.5522,0,5,AAL90,Anat,5,3,0.6,4,4.6,AAL90,6p
+"Guo et al., 2017",2017,FC,No,no,0,1,28,40,0.92,0.95,0,8,Custom,Anat,4,3,0.6,3.2,3.8,Other,24p
