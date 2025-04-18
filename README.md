@@ -15,4 +15,7 @@ This analysis can be replicated using the motion23.rmd file which relies on the 
 
 Various supplemental material for multiple comparisons and dip tests can be found here. 
 
+# Paper
+
+https://pmc.ncbi.nlm.nih.gov/articles/PMC10618094/
 
